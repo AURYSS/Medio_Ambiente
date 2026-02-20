@@ -100,6 +100,7 @@
                             </div>
 
                             <!-- Clima actual - Lado derecho -->
+                            {% if temp %}
                             <div class="col-md-6">
                                 <!-- Información del clima actual -->
                                 <div class="text-center mb-4">
@@ -141,9 +142,11 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
 
                         <!-- Mapa Interactivo - Sección Separada -->
+                        {% if lat and lon %}
                         <div class="row mt-4">
                             <div class="col-12">
                                 <div class="card border-0 shadow-sm">
@@ -156,6 +159,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>

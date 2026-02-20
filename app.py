@@ -3,6 +3,9 @@ import requests
 import os
 from datetime import datetime
 from googleapiclient.discovery import build
+from dotenv import load_dotenv
+
+load_dotenv()
 
 days_es = {
     'Monday': 'Lunes',
@@ -15,6 +18,12 @@ days_es = {
 }
 
 app = Flask(__name__)
+
+@app.context_processor
+def inject_api_keys():
+    return {
+        'GOOGLE_MAPS_API_KEY': os.environ.get('GOOGLE_MAPS_API_KEY', '')
+    }
 
 @app.route('/')
 def index():
@@ -183,7 +192,9 @@ def calidad_aire():
 
 @app.route('/videos')
 def videos():
-    api_key = 'AIzaSyAYkrp8R938-iSF356trJ8eaOVtzJhlLQg'
+    api_key = os.environ.get('YOUTUBE_API_KEY')
+    if not api_key:
+        return "Error: API key de YouTube no configurada. Establece la variable de entorno YOUTUBE_API_KEY."
     youtube = build('youtube', 'v3', developerKey=api_key)
     request = youtube.search().list(
         q='medio ambiente',
@@ -209,7 +220,9 @@ def videos():
 @app.route('/noticias')
 def noticias():
     categoria = request.args.get('categoria', 'medio ambiente')
-    api_key = 'pub_e106a6f929254b1081b6f29cf661886d'
+    api_key = os.environ.get('NEWSDATA_API_KEY')
+    if not api_key:
+        return "Error: API key de NewsData no configurada. Establece la variable de entorno NEWSDATA_API_KEY."
     url = f'https://newsdata.io/api/1/news?apikey={api_key}&q={categoria}&language=es&size=10'
     response = requests.get(url)
     print(f"Status de la API de noticias: {response.status_code}")
