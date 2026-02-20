@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="bg-white p-4 rounded shadow-sm">
+        <h2 class="text-success fw-semibold mb-3">
+            Las 3 R del cuidado ambiental
+        </h2>
+
+        <p class="text-muted">
+            La estrategia de las 3 R es un principio fundamental para la
+            protección del medio ambiente, ya que promueve el uso responsable
+            de los recursos y la reducción del impacto ambiental generado por
+            las actividades humanas.
+        </p>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h4 class="card-title text-success">Reducir</h4>
+                        <p class="card-text">
+                            Consiste en disminuir el consumo innecesario de
+                            productos y recursos, evitando la generación
+                            excesiva de residuos desde su origen.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h4 class="card-title text-success">Reutilizar</h4>
+                        <p class="card-text">
+                            Implica dar una segunda vida a los objetos,
+                            prolongando su uso y reduciendo la necesidad
+                            de fabricar nuevos productos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h4 class="card-title text-success">Reciclar</h4>
+                        <p class="card-text">
+                            Se basa en transformar los residuos en nuevos
+                            materiales o productos, disminuyendo la
+                            contaminación y el uso de recursos naturales.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <img
+                src="{{ url_for('static', filename='images/reciclaje.jpg') }}"
+                class="img-fluid rounded shadow-sm"
+                alt="Reciclaje y cuidado ambiental"
+            >
+        </div>
+    </section>
+{% endblock %}

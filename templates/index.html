@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- Hero Section Mejorado -->
+    <section class="hero-section text-white position-relative overflow-hidden" style="min-height: 90vh;">
+        <!-- Background con overlay dinámico -->
+        <div class="hero-bg" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.9) 0%, rgba(32, 201, 151, 0.9) 100%), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; background-attachment: fixed;"></div>
+
+        <div class="container position-relative" style="z-index: 2;">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-7">
+                    <div class="hero-content fade-in">
+                        <h1 class="display-3 fw-bold mb-4">
+                            <i class="fas fa-leaf text-warning me-3 animate-pulse"></i>
+                            Conciencia Ambiental
+                        </h1>
+                        <p class="lead mb-4 fs-5">
+                            Descubre cómo tus acciones diarias pueden marcar la diferencia en la preservación de nuestro planeta.
+                            Información actualizada, consejos prácticos y herramientas innovadoras para un futuro sostenible.
+                        </p>
+
+                        <!-- Estadísticas rápidas -->
+                        <div class="stats-row d-flex gap-4 mb-4 flex-wrap">
+                            <div class="stat-item">
+                                <div class="stat-number fw-bold text-warning" data-target="1500000">0</div>
+                                <div class="stat-label small text-white-50">Especies en peligro</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number fw-bold text-warning" data-target="17">0</div>
+                                <div class="stat-label small text-white-50">Millones de km² deforestados</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number fw-bold text-warning" data-target="1.1">0</div>
+                                <div class="stat-label small text-white-50">°C de calentamiento global</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a href="/clima" class="btn btn-light btn-lg px-4 py-3 shadow-lg hover-lift">
+                                <i class="fas fa-cloud-sun me-2"></i>Consultar Clima
+                            </a>
+                            <a href="/calculadora" class="btn btn-outline-light btn-lg px-4 py-3 shadow-lg hover-lift">
+                                <i class="fas fa-calculator me-2"></i>Calcular mi Huella
+                            </a>
+                            <a href="/calidad-aire" class="btn btn-warning btn-lg px-4 py-3 shadow-lg hover-lift">
+                                <i class="fas fa-wind me-2"></i>Calidad del Aire
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 text-center mt-5 mt-lg-0">
+                    <div class="hero-image-container position-relative">
+                        <!-- Imagen principal -->
+                        <img
+                            src="https://images.unsplash.com/photo-1569163139394-de4e4f43e4e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            class="img-fluid rounded-4 shadow-xl main-hero-image"
+                            alt="Planeta Tierra desde el espacio"
+                            style="max-height: 500px; object-fit: cover; filter: brightness(1.1);"
+                        >
+
+                        <!-- Elementos flotantes decorativos -->
+                        <div class="floating-element floating-1">
+                            <i class="fas fa-seedling text-success fa-2x"></i>
+                        </div>
+                        <div class="floating-element floating-2">
+                            <i class="fas fa-sun text-warning fa-2x"></i>
+                        </div>
+                        <div class="floating-element floating-3">
+                            <i class="fas fa-water text-info fa-2x"></i>
+                        </div>
+
+                        <!-- Overlay con mensaje motivacional -->
+                        <div class="hero-overlay">
+                            <div class="overlay-content">
+                                <h5 class="fw-bold text-white mb-2">
+                                    <i class="fas fa-hand-holding-heart text-danger me-2"></i>
+                                    ¡Tu Acción Importa!
+                                </h5>
+                                <p class="text-white-50 small mb-0">
+                                    Cada decisión sostenible contribuye al cambio global
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <p class="small text-white-50 mt-2">Descubre más</p>
+        </div>
+    </section>
+
+    <!-- Features Section Mejorada -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="fw-bold text-success mb-3">Herramientas y Recursos</h2>
+                    <p class="text-muted lead">Explora nuestras herramientas interactivas y descubre cómo contribuir al cuidado del medio ambiente</p>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <!-- Educación -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-card feature-card" data-category="educacion">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-graduation-cap text-primary fa-3x"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Educación</h5>
+                            <p class="card-text text-muted small">Conoce los fundamentos ambientales</p>
+                            <div class="feature-links">
+                                <a href="/sistema-ambiental" class="btn btn-outline-primary btn-sm me-1 mb-1">Sistema Ambiental</a>
+                                <a href="/futuro" class="btn btn-outline-primary btn-sm me-1 mb-1">Futuro del Planeta</a>
+                                <a href="/tres-r" class="btn btn-outline-primary btn-sm mb-1">Las 3 R</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clima y Ambiente -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-card feature-card" data-category="clima">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-cloud-sun text-info fa-3x"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Clima & Ambiente</h5>
+                            <p class="card-text text-muted small">Información meteorológica y calidad del aire</p>
+                            <div class="feature-links">
+                                <a href="/clima" class="btn btn-outline-info btn-sm me-1 mb-1">Clima Actual</a>
+                                <a href="/calidad-aire" class="btn btn-outline-info btn-sm mb-1">Calidad del Aire</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Herramientas Interactivas -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-card feature-card" data-category="herramientas">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-tools text-success fa-3x"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Herramientas</h5>
+                            <p class="card-text text-muted small">Calcula tu impacto y toma acción</p>
+                            <div class="feature-links">
+                                <a href="/calculadora" class="btn btn-outline-success btn-sm me-1 mb-1">Calculadora CO₂</a>
+                                <a href="/videos" class="btn btn-outline-success btn-sm me-1 mb-1">Videos</a>
+                                <a href="/noticias" class="btn btn-outline-success btn-sm mb-1">Noticias</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Eventos y Comunidad -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-card feature-card" data-category="eventos">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-globe-americas text-warning fa-3x"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Eventos Globales</h5>
+                            <p class="card-text text-muted small">Mantente informado sobre eventos ambientales</p>
+                            <div class="feature-links">
+                                <a href="/eventos" class="btn btn-outline-warning btn-sm">Eventos Ambientales</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas Impactantes -->
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h3 class="fw-bold text-success mb-4">El Planeta Necesita Tu Ayuda</h3>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-3 col-6">
+                    <div class="stat-card text-center p-3 bg-white rounded-3 shadow-sm">
+                        <div class="stat-icon mb-2">
+                            <i class="fas fa-thermometer-half text-danger fa-2x"></i>
+                        </div>
+                        <div class="stat-value fw-bold text-danger h4 mb-1">1.1°C</div>
+                        <div class="stat-label small text-muted">Calentamiento Global</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card text-center p-3 bg-white rounded-3 shadow-sm">
+                        <div class="stat-icon mb-2">
+                            <i class="fas fa-tree text-success fa-2x"></i>
+                        </div>
+                        <div class="stat-value fw-bold text-success h4 mb-1">18M</div>
+                        <div class="stat-label small text-muted">Hectáreas deforestadas/año</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card text-center p-3 bg-white rounded-3 shadow-sm">
+                        <div class="stat-icon mb-2">
+                            <i class="fas fa-fish text-info fa-2x"></i>
+                        </div>
+                        <div class="stat-value fw-bold text-info h4 mb-1">1.5M</div>
+                        <div class="stat-label small text-muted">Especies en peligro</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card text-center p-3 bg-white rounded-3 shadow-sm">
+                        <div class="stat-icon mb-2">
+                            <i class="fas fa-recycle text-warning fa-2x"></i>
+                        </div>
+                        <div class="stat-value fw-bold text-warning h4 mb-1">8M</div>
+                        <div class="stat-label small text-muted">Ton. plástico en océanos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Mejorado -->
+    <section class="py-5 cta-section position-relative overflow-hidden" style="background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%); color: white !important;">
+        <div class="cta-bg-pattern"></div>
+        <div class="container text-center position-relative" style="z-index: 2;">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto">
+                    <h3 class="fw-bold mb-3 display-5" style="color: white !important;">
+                        <i class="fas fa-seedling text-warning me-3"></i>
+                        ¿Listo para Hacer la Diferencia?
+                    </h3>
+                    <p class="lead mb-4 fs-5" style="color: rgba(255, 255, 255, 0.9) !important;">
+                        Únete a la causa ambiental. Cada acción cuenta para construir un futuro sostenible.
+                        Comienza hoy mismo con nuestras herramientas interactivas.
+                    </p>
+
+                    <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+                        <a href="/calculadora" class="btn btn-light btn-lg px-4 py-3 shadow-lg hover-lift">
+                            <i class="fas fa-calculator me-2"></i>Calcular mi Huella de Carbono
+                        </a>
+                        <a href="/clima" class="btn btn-outline-light btn-lg px-4 py-3 shadow-lg hover-lift">
+                            <i class="fas fa-cloud-sun me-2"></i>Consultar Clima Local
+                        </a>
+                        <a href="/calidad-aire" class="btn btn-warning btn-lg px-4 py-3 shadow-lg hover-lift">
+                            <i class="fas fa-wind me-2"></i>Ver Calidad del Aire
+                        </a>
+                    </div>
+
+                    <div class="row g-3 mt-4">
+                        <div class="col-md-4">
+                            <div class="cta-feature p-3 bg-white bg-opacity-10 rounded-3">
+                                <i class="fas fa-users text-info fa-2x mb-2"></i>
+                                <h6 class="fw-bold" style="color: white !important;">Comunidad</h6>
+                                <p class="small mb-0" style="color: rgba(255, 255, 255, 0.8) !important;">Únete a miles de personas comprometidas</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="cta-feature p-3 bg-white bg-opacity-10 rounded-3">
+                                <i class="fas fa-lightbulb text-warning fa-2x mb-2"></i>
+                                <h6 class="fw-bold" style="color: white !important;">Educación</h6>
+                                <p class="small mb-0" style="color: rgba(255, 255, 255, 0.8) !important;">Aprende con contenido actualizado</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="cta-feature p-3 bg-white bg-opacity-10 rounded-3">
+                                <i class="fas fa-hand-holding-heart text-danger fa-2x mb-2"></i>
+                                <h6 class="fw-bold" style="color: white !important;">Impacto</h6>
+                                <p class="small mb-0" style="color: rgba(255, 255, 255, 0.8) !important;">Mide y reduce tu huella ambiental</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

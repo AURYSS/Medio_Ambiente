@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="text-center mb-5">
+                    <h1 class="fw-bold text-success">
+                        <i class="fas fa-play-circle me-3"></i>Videos Educativos
+                    </h1>
+                    <p class="lead text-muted">Descubre contenido inspirador sobre medio ambiente y sostenibilidad</p>
+                </div>
+                <div class="row g-4">
+                    {% for video in videos %}
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="card h-100 border-0 shadow-sm hover-card">
+                            <div class="ratio ratio-16x9">
+                                <iframe src="https://www.youtube.com/embed/{{ video.id }}"
+                                        title="{{ video.title }}"
+                                        allowfullscreen
+                                        class="rounded-top">
+                                </iframe>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-dark">{{ video.title }}</h5>
+                                <p class="card-text text-muted">{{ video.description[:150] }}...</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

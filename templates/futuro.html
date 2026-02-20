@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="bg-white p-4 rounded shadow-sm">
+        <h2 class="text-success fw-semibold mb-3">
+            El planeta que dejaremos a nuestros hijos
+        </h2>
+
+        <p class="text-muted">
+            El futuro del planeta depende directamente de las acciones que
+            realizamos en el presente. Cada decisión cotidiana tiene un impacto
+            en los ecosistemas y en la calidad de vida de las generaciones futuras.
+        </p>
+
+        <div class="row align-items-center mt-4">
+            <div class="col-md-6">
+                <p>
+                    El uso responsable de los recursos naturales, la reducción de
+                    residuos y la adopción de prácticas sostenibles son aspectos
+                    clave para garantizar un entorno saludable y equilibrado.
+                </p>
+
+                <p>
+                    Fomentar la educación ambiental permite crear conciencia sobre
+                    la importancia de proteger el planeta y asumir un compromiso
+                    colectivo con el desarrollo sostenible.
+                </p>
+
+                <p>
+                    Cuidar el medio ambiente hoy es una inversión para asegurar
+                    bienestar, salud y oportunidades a las próximas generaciones.
+                </p>
+            </div>
+
+            <div class="col-md-6">
+                <img
+                    src="{{ url_for('static', filename='images/futuro.jpg') }}"
+                    class="img-fluid rounded shadow-sm"
+                    alt="Futuro del planeta"
+                >
+            </div>
+        </div>
+    </section>
+{% endblock %}

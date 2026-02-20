@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <style>
+        .list-group-item {
+            animation: fadeIn 0.5s ease-in;
+            cursor: pointer;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .marker-bounce {
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+
+    {% set category_translations = {
+        'Volcanoes': 'Volcanes',
+        'Earthquakes': 'Terremotos',
+        'Storms': 'Tormentas',
+        'Wildfires': 'Incendios',
+        'Floods': 'Inundaciones',
+        'Droughts': 'Sequías',
+        'Dust and Haze': 'Polvo y Niebla',
+        'Manmade': 'Hechos por Humanos',
+        'Sea and Lake Ice': 'Hielo Marino y Lacustre',
+        'Severe Storms': 'Tormentas Severas',
+        'Water Color': 'Color del Agua',
+        'Landslides': 'Deslizamientos de Tierra'
+    } %}
+
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-success text-white text-center">
+                        <h2 class="card-title mb-0">
+                            <i class="fas fa-globe-americas"></i> Eventos Ambientales Naturales
+                        </h2>
+                        <p class="mb-0 mt-2 small">Datos en tiempo real de la NASA (últimos 60 días) - {{ events|length }} eventos{% if selected_category %} filtrados por {{ category_translations.get(selected_category, selected_category) }}{% endif %}</p>
+                    </div>
+                    <div class="card-body">
+                        {% if events and not ('error' in events[0] or 'no_results' in events[0]) %}
+                        <!-- Filtros y controles -->
+                        <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap">
+                            <form method="get" class="d-flex align-items-center">
+                                <label for="category-select" class="me-2 fw-bold">Filtrar por categoría:</label>
+                                <select name="category" id="category-select" class="form-select me-2" style="width: auto;">
+                                    <option value="">Todas las categorías</option>
+                                    {% for cat in all_categories %}
+                                    <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ category_translations.get(cat, cat) }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filtrar</button>
+                            </form>
+                            <button onclick="location.reload()" class="btn btn-secondary ms-2" title="Actualizar datos"><i class="fas fa-sync"></i> Actualizar</button>
+                        </div>
+
+                        <div class="row">
+                            <!-- Lista de Eventos - Lado izquierdo -->
+                            <div class="col-md-5">
+                                <h4 class="mb-3"><i class="fas fa-list"></i> Eventos Recientes</h4>
+                                <div class="list-group" style="max-height: 600px; overflow-y: auto;">
+                                    {% for event in events %}
+                                    <div class="list-group-item list-group-item-action" data-lat="{{ event.lat }}" data-lon="{{ event.lon }}" data-title="{{ event.title }}" data-desc="{{ event.description }}" data-category="{{ event.category }}">
+                                        <h6 class="mb-1">{{ event.title }}</h6>
+                                        <p class="mb-1 small text-muted">{{ event.description[:100] }}...</p>
+                                        <small class="text-secondary">
+                                            <i class="fas fa-tag"></i> {{ event.category }} | 
+                                            <i class="fas fa-calendar"></i> {{ event.date[:10] }}
+                                        </small>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Mapa - Lado derecho -->
+                            <div class="col-md-7">
+                                <h4 class="mb-3"><i class="fas fa-map-marked-alt"></i> Ubicaciones en el Mapa</h4>
+                                <div id="events-map" style="height: 600px; width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning text-center">
+                            {% if 'error' in events[0] %}
+                            <i class="fas fa-exclamation-triangle"></i> {{ events[0]['error'] }}
+                            {% elif 'no_results' in events[0] %}
+                            <i class="fas fa-search"></i> {{ events[0]['no_results'] }}
+                            {% else %}
+                            <i class="fas fa-info-circle"></i> No hay eventos disponibles en este momento.
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        {% if events and 'error' not in events[0] %}
+        let eventsMap;
+
+        function initEventsMap() {
+            eventsMap = new google.maps.Map(document.getElementById('events-map'), {
+                zoom: 2,
+                center: { lat: 20, lng: 0 },
+                styles: [
+                    {
+                        featureType: 'water',
+                        elementType: 'geometry',
+                        stylers: [{ color: '#e9e9e9' }, { lightness: 17 }]
+                    },
+                    {
+                        featureType: 'landscape',
+                        elementType: 'geometry',
+                        stylers: [{ color: '#f5f5f5' }, { lightness: 20 }]
+                    }
+                ]
+            });
+
+            const bounds = new google.maps.LatLngBounds();
+            let hasMarkers = false;
+
+            {% for event in events %}
+            {% if event.lat and event.lon %}
+            const location{{ loop.index }} = { lat: {{ event.lat }}, lng: {{ event.lon }} };
+            const marker{{ loop.index }} = new google.maps.Marker({
+                position: location{{ loop.index }},
+                map: eventsMap,
+                title: '{{ event.title }}',
+                icon: {
+                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                    scaledSize: new google.maps.Size(32, 32)
+                }
+            });
+
+            const infoWindow{{ loop.index }} = new google.maps.InfoWindow({
+                content: `
+                    <div style="max-width: 250px;">
+                        <h6>{{ event.title }}</h6>
+                        <p>{{ event.description[:150] }}...</p>
+                        <small><strong>Categoría:</strong> {{ event.category }}<br>
+                        <strong>Fecha:</strong> {{ event.date[:10] }}</small>
+                    </div>
+                `
+            });
+
+            marker{{ loop.index }}.addListener('click', () => {
+                infoWindow{{ loop.index }}.open(eventsMap, marker{{ loop.index }});
+            });
+
+            bounds.extend(location{{ loop.index }});
+            hasMarkers = true;
+            {% endif %}
+            {% endfor %}
+
+            if (hasMarkers) {
+                eventsMap.fitBounds(bounds);
+            }
+        }
+
+        window.onload = initEventsMap;
+
+        // Hacer clic en un evento de la lista para centrar el mapa
+        document.querySelectorAll('.list-group-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const lat = parseFloat(this.dataset.lat);
+                const lon = parseFloat(this.dataset.lon);
+                if (!isNaN(lat) && !isNaN(lon) && eventsMap) {
+                    eventsMap.setCenter({ lat: lat, lng: lon });
+                    eventsMap.setZoom(8);
+                }
+            });
+        });
+        {% endif %}
+    </script>
+{% endblock %}

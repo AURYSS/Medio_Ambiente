@@ -1,0 +1,583 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .calculator-hero {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 3rem 0;
+        margin: -2rem -2rem 2rem -2rem;
+        border-radius: 0 0 50px 50px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .calculator-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="20" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="80" r="0.8" fill="rgba(255,255,255,0.1)"/><circle cx="30" cy="60" r="0.6" fill="rgba(255,255,255,0.1)"/></svg>');
+        opacity: 0.6;
+    }
+
+    .input-card {
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .input-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #28a745, #20c997);
+        border-radius: 0 4px 4px 0;
+    }
+
+    .input-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .input-card .card-body {
+        padding: 2rem;
+    }
+
+    .input-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .input-card:hover .input-icon {
+        transform: scale(1.1);
+    }
+
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        transform: translateY(-2px);
+    }
+
+    .result-display {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 25px;
+        padding: 3rem 2rem;
+        color: white;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        position: relative;
+        overflow: hidden;
+        margin: 2rem 0;
+    }
+
+    .result-display::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.1) 360deg);
+        animation: rotate 8s linear infinite;
+    }
+
+    .carbon-number {
+        font-size: 4rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 1;
+    }
+
+    .carbon-unit {
+        font-size: 1.5rem;
+        margin-left: 0.5rem;
+        opacity: 0.9;
+    }
+
+    .impact-meter {
+        width: 100%;
+        height: 20px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 1rem 0;
+        position: relative;
+    }
+
+    .impact-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 1.5s ease;
+        position: relative;
+    }
+
+    .impact-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .recommendations-card {
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        border: 1px solid #f39c12;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .tip-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-left: 4px solid #28a745;
+        transition: all 0.3s ease;
+    }
+
+    .tip-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .calculate-btn {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        border-radius: 25px;
+        padding: 1rem 3rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: white;
+        box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .calculate-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .calculate-btn:hover::before {
+        left: 100%;
+    }
+
+    .calculate-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
+    }
+
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    .fade-in-up.delay-1 { animation-delay: 0.1s; }
+    .fade-in-up.delay-2 { animation-delay: 0.2s; }
+    .fade-in-up.delay-3 { animation-delay: 0.3s; }
+    .fade-in-up.delay-4 { animation-delay: 0.4s; }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="calculator-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-calculator pulse-animation me-3"></i>
+                    Calculadora de Carbono
+                </h1>
+                <p class="lead mb-4">
+                    Descubre tu huella de carbono mensual y aprende cómo reducir tu impacto ambiental.
+                    Pequeños cambios pueden marcar una gran diferencia para el planeta.
+                </p>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-leaf text-success me-2" style="font-size: 2rem;"></i>
+                    <span class="h5 mb-0">Cálculo estimativo basado en factores ambientales</span>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <i class="fas fa-globe-americas" style="font-size: 10rem; color: rgba(255,255,255,0.2);"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Input Form -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4 fade-in-up">
+                <i class="fas fa-edit me-2 text-primary"></i>
+                Ingresa tus Hábitos Mensuales
+            </h2>
+        </div>
+    </div>
+
+    <form method="post" class="mb-5">
+        <div class="row">
+            <!-- Electricidad -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="input-card h-100 fade-in-up delay-1">
+                    <div class="card-body text-center">
+                        <div class="input-icon bg-warning text-white mx-auto">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h5 class="card-title mb-3">Electricidad</h5>
+                        <div class="mb-3">
+                            <input type="number" class="form-control text-center" id="electrico" name="electrico"
+                                   placeholder="200" min="0" step="0.1" required>
+                            <small class="text-muted d-block mt-2">kWh mensuales</small>
+                        </div>
+                        <div class="alert alert-light border">
+                            <small><strong>Factor:</strong> 0.5 kg CO₂/kWh</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transporte -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="input-card h-100 fade-in-up delay-2">
+                    <div class="card-body text-center">
+                        <div class="input-icon bg-danger text-white mx-auto">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h5 class="card-title mb-3">Transporte</h5>
+                        <div class="mb-3">
+                            <input type="number" class="form-control text-center" id="transporte" name="transporte"
+                                   placeholder="500" min="0" step="0.1" required>
+                            <small class="text-muted d-block mt-2">kilómetros mensuales</small>
+                        </div>
+                        <div class="alert alert-light border">
+                            <small><strong>Factor:</strong> 0.2 kg CO₂/km</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alimentación -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="input-card h-100 fade-in-up delay-3">
+                    <div class="card-body text-center">
+                        <div class="input-icon bg-danger text-white mx-auto">
+                            <i class="fas fa-drumstick-bite"></i>
+                        </div>
+                        <h5 class="card-title mb-3">Alimentación</h5>
+                        <div class="mb-3">
+                            <input type="number" class="form-control text-center" id="carne" name="carne"
+                                   placeholder="5" min="0" step="0.1" required>
+                            <small class="text-muted d-block mt-2">kg de carne mensual</small>
+                        </div>
+                        <div class="alert alert-light border">
+                            <small><strong>Factor:</strong> 50 kg CO₂/kg</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vuelos -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="input-card h-100 fade-in-up delay-4">
+                    <div class="card-body text-center">
+                        <div class="input-icon bg-primary text-white mx-auto">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <h5 class="card-title mb-3">Vuelos</h5>
+                        <div class="mb-3">
+                            <input type="number" class="form-control text-center" id="vuelo" name="vuelo"
+                                   placeholder="2" min="0" step="0.1" required>
+                            <small class="text-muted d-block mt-2">horas de vuelo mensual</small>
+                        </div>
+                        <div class="alert alert-light border">
+                            <small><strong>Factor:</strong> 0.25 kg CO₂/hora</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculate Button -->
+        <div class="text-center mt-4 fade-in-up delay-1">
+            <button class="calculate-btn" type="submit">
+                <i class="fas fa-calculator me-2"></i>
+                Calcular Mi Huella de Carbono
+            </button>
+        </div>
+    </form>
+
+    <!-- Results Section -->
+    {% if resultado %}
+    <div class="result-display fade-in-up delay-1">
+        <div class="position-relative z-1">
+            <h2 class="mb-3">
+                <i class="fas fa-chart-line me-2"></i>
+                Tu Huella de Carbono Mensual
+            </h2>
+
+            {% if resultado is number %}
+            <div class="carbon-number">
+                {{ "%.1f"|format(resultado) }}
+                <span class="carbon-unit">kg CO₂</span>
+            </div>
+
+            <!-- Impact Meter -->
+            <div class="impact-meter">
+                <div class="impact-fill"
+                     style="width: {{ [100, (resultado / 15) * 100]|min }}%;
+                            background: linear-gradient(90deg,
+                                {% if resultado < 500 %}#28a745{% elif resultado < 1000 %}#ffc107{% else %}#dc3545{% endif %},
+                                {% if resultado < 500 %}#20c997{% elif resultado < 1000 %}#fd7e14{% else %}#c82333{% endif %});">
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="h4 mb-1">
+                            {% if resultado < 500 %}
+                            <i class="fas fa-trophy text-warning"></i>
+                            {% elif resultado < 1000 %}
+                            <i class="fas fa-thumbs-up text-success"></i>
+                            {% else %}
+                            <i class="fas fa-exclamation-triangle text-danger"></i>
+                            {% endif %}
+                        </div>
+                        <h5>
+                            {% if resultado < 500 %}Excelente{% elif resultado < 1000 %}Buena{% else %}Alta{% endif %}
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="h4 mb-1">{{ "%.0f"|format(resultado / 30) }}</div>
+                        <small>kg CO₂ diarios</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="h4 mb-1">{{ "%.0f"|format(resultado * 12) }}</div>
+                        <small>kg CO₂ anuales</small>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                {{ resultado }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recommendations -->
+    {% if resultado is number %}
+    <div class="recommendations-card fade-in-up delay-2">
+        <h3 class="text-center mb-4">
+            <i class="fas fa-lightbulb text-warning me-2"></i>
+            Recomendaciones Personalizadas
+        </h3>
+        <div class="row">
+            <div class="col-md-6">
+                {% if resultado < 500 %}
+                <div class="alert alert-success">
+                    <h5><i class="fas fa-check-circle me-2"></i>¡Excelente trabajo!</h5>
+                    <p class="mb-0">Tu huella de carbono es baja. Comparte tus hábitos sostenibles con otros y continúa así.</p>
+                </div>
+                {% elif resultado < 1000 %}
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-info-circle me-2"></i>Buen progreso</h5>
+                    <p class="mb-0">Estás en el camino correcto. Pequeños cambios adicionales pueden reducir aún más tu impacto.</p>
+                </div>
+                {% else %}
+                <div class="alert alert-danger">
+                    <h5><i class="fas fa-exclamation-triangle me-2"></i>Área de mejora</h5>
+                    <p class="mb-0">Hay oportunidades significativas para reducir tu huella. Revisa los consejos a continuación.</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <div class="text-center">
+                    <i class="fas fa-seedling" style="font-size: 3rem; color: #28a745;"></i>
+                    <p class="mt-2 mb-0">Cada kg de CO₂ que reduces ayuda al planeta</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Tips Section -->
+    <div class="tips-grid fade-in-up delay-3">
+        <div class="tip-card">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-bolt text-warning me-3" style="font-size: 2rem;"></i>
+                <h5 class="mb-0">Energía Renovable</h5>
+            </div>
+            <p>Instala paneles solares o elige proveedores de energía verde. Reduce hasta un 50% tus emisiones de electricidad.</p>
+        </div>
+
+        <div class="tip-card">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-bicycle text-success me-3" style="font-size: 2rem;"></i>
+                <h5 class="mb-0">Transporte Sostenible</h5>
+            </div>
+            <p>Usa bicicleta, transporte público o vehículos eléctricos. Camina distancias cortas en lugar de conducir.</p>
+        </div>
+
+        <div class="tip-card">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-carrot text-danger me-3" style="font-size: 2rem;"></i>
+                <h5 class="mb-0">Alimentación Consciente</h5>
+            </div>
+            <p>Reduce el consumo de carne roja. Opta por alimentos locales, de temporada y vegetales.</p>
+        </div>
+
+        <div class="tip-card">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-home text-primary me-3" style="font-size: 2rem;"></i>
+                <h5 class="mb-0">Eficiencia Energética</h5>
+            </div>
+            <p>Aísla tu hogar, usa electrodomésticos eficientes y apaga dispositivos que no uses.</p>
+        </div>
+
+        <div class="tip-card">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-recycle text-info me-3" style="font-size: 2rem;"></i>
+                <h5 class="mb-0">Reduce, Reutiliza, Recicla</h5>
+            </div>
+            <p>Minimiza el consumo, reutiliza productos y recicla correctamente para reducir residuos.</p>
+        </div>
+
+        <div class="tip-card">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fas fa-tree text-success me-3" style="font-size: 2rem;"></i>
+                <h5 class="mb-0">Compensa tu Carbono</h5>
+            </div>
+            <p>Planta árboles, apoya proyectos de reforestación o compra créditos de carbono verificados.</p>
+        </div>
+    </div>
+
+    <!-- Educational Info -->
+    <div class="card border-0 shadow-lg mt-5 fade-in-up delay-4">
+        <div class="card-body p-5">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-graduation-cap me-2 text-primary"></i>
+                ¿Qué es la Huella de Carbono?
+            </h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-success mb-3">¿Por qué importa?</h5>
+                    <p>La huella de carbono mide el total de gases de efecto invernadero que generamos nuestras actividades diarias. Estos gases atrapan el calor en la atmósfera y contribuyen al cambio climático.</p>
+
+                    <h5 class="text-info mb-3">Objetivos globales</h5>
+                    <ul>
+                        <li>Acuerdo de París: Limitar el calentamiento global a 1.5°C</li>
+                        <li>Reducción del 45% de emisiones para 2030</li>
+                        <li>Neutralidad de carbono para 2050</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="text-warning mb-3">Factores principales</h5>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Electricidad y calefacción</span>
+                            <span class="badge bg-warning">25-30%</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Transporte</span>
+                            <span class="badge bg-danger">14-20%</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Alimentación</span>
+                            <span class="badge bg-success">20-25%</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Productos y servicios</span>
+                            <span class="badge bg-info">20-25%</span>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-light border">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Esta calculadora proporciona estimaciones. Para mediciones precisas, consulta con expertos ambientales.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
